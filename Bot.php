@@ -1,6 +1,6 @@
 <?php
-include('vendor/autoload.php');
-include('Db.php');
+require_once('vendor/autoload.php');
+require_once('Db.php');
 use Telegram\Bot\Api;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 
