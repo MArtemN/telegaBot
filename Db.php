@@ -6,6 +6,7 @@ class Db
     protected $userName = 'root';
     protected $password = 'root';
     protected $dbName = 'foodPlanBd';
+    protected $maxProtein = 55;
 
     protected function getConnect()
     {
@@ -34,10 +35,30 @@ class Db
         $affectedRowsNumber = $conn->exec($sql);
 
         if($affectedRowsNumber > 0 ){
-            return 'Данные успешно записаны';
+            $maxProteinCount = $this->getProteinForDay();
+            if ($maxProteinCount >= $this->maxProtein) {
+                return "Данные успешно записаны\n\n<b>ВНИМАНИЕ! КОЛИЧЕСТВО БЕЛКА ПРЕВОСХОДИТ МАКСИМАЛЬНО ДОПУСТИМОЕ!\nБелка за день = ".$maxProteinCount."</b>";
+            }
+
+            return "Данные успешно записаны\nБелка за день = ".$maxProteinCount;
         } else {
             return 'Данные не записались';
         }
+    }
+
+    protected function getProteinForDay()
+    {
+        $response = 0;
+
+        $conn = $this->getConnect();
+        $sql = "SELECT `protein` FROM `food` WHERE date = CURDATE()";
+        $request = $conn->query($sql);
+
+        while($row = $request->fetch()){
+            $response += $row['protein'];
+        }
+
+        return $response;
     }
 
     public function getReport($period)
@@ -55,17 +76,18 @@ class Db
             $sql = "SELECT `food_name`, `protein`, `date` FROM food WHERE MONTH(date) = MONTH(CURDATE())";
         }
 
-        $result = $conn->query($sql);
+        $request = $conn->query($sql);
 
-        if (!$result) {
+        if (!$request) {
             return 'Ошибка получения попробуйте еще';
         }
-        while($row = $result->fetch()){
+        while($row = $request->fetch()){
             $resultArr[$row['date']][] = $row;
         }
 
         foreach ($resultArr as $date => $itemArr) {
-            $response .= $date;
+            $formattedDate = date("d.m.Y", strtotime($date));
+            $response .= $formattedDate;
             $proteinCount = 0;
             foreach ($itemArr as $item) {
                 if ($date == $item['date']) {
