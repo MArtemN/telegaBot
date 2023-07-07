@@ -11,6 +11,7 @@ class Bot
     protected $result;
     protected $text;
     protected $chat_id;
+    protected $messageId;
     protected $firstName;
     protected $lastName;
     protected $userName;
@@ -29,6 +30,7 @@ class Bot
         $this->firstName = $this->result['message']['chat']['first_name'];
         $this->lastName  = $this->result['message']['chat']['last_name'];
         $this->userName = $this->result['message']['chat']['username'];
+        $this->messageId = $this->result['message']['message_id'];
 
         $baseKeyboard = \Telegram\Bot\Keyboard\Keyboard::make([
             'keyboard' => [
@@ -84,7 +86,7 @@ class Bot
             case substr_count($this->text, ",") < 2:
                 $foodData = explode(',', $this->text);
                 $db = new Db();
-                $response = $db->addFood($foodData[0], $foodData[1], $this->userName);
+                $response = $db->addFood($foodData[0], $foodData[1], $this->userName, $this->messageId);
 
                 $this->sendBotMessage($response, $baseKeyboard);
                 break;

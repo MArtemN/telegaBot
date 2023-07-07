@@ -21,7 +21,7 @@ class Db
         }
     }
 
-    public function addFood($foodName, $proteinCount, $userName)
+    public function addFood($foodName, $proteinCount, $userName, $messageId)
     {
         $conn = $this->getConnect();
 
@@ -30,7 +30,7 @@ class Db
         }
 
         $currentDate = date('Y-m-d H:i:s');
-        $sql = "INSERT INTO `food` (`user_name`, `food_name`, `protein`, `date`) VALUES ('$userName', '$foodName', '$proteinCount', '$currentDate')";
+        $sql = "INSERT INTO `food` (`user_name`, `food_name`, `protein`, `date`, `message_id`) VALUES ('$userName', '$foodName', '$proteinCount', '$currentDate', '$messageId')";
         $affectedRowsNumber = $conn->exec($sql);
 
         if($affectedRowsNumber > 0 ){
