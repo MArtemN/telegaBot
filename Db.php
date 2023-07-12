@@ -1,12 +1,12 @@
 <?php
-
+require_once($_SERVER['DOCUMENT_ROOT'].'/foodBot/settings/setting.php');
 class Db
 {
-    protected $host = 'localhost';
-    protected $userName = 'a0657865_foodPlan';
-    protected $password = '0lPvxzG9';
-    protected $dbName = 'a0657865_foodPlan';
-    protected $maxProtein = 55;
+    protected $host = HOST;
+    protected $userName = USER_NAME;
+    protected $password = PASSWORD;
+    protected $dbName = DB_NAME;
+    protected $maxProtein = MAX_PROTEIN;
 
     protected function getConnect()
     {
