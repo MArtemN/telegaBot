@@ -2,10 +2,10 @@
 
 class Db
 {
-    protected $host = 'mysqldb';
-    protected $userName = 'root';
-    protected $password = 'root';
-    protected $dbName = 'foodPlanBd';
+    protected $host = 'localhost';
+    protected $userName = 'a0657865_foodPlan';
+    protected $password = '0lPvxzG9';
+    protected $dbName = 'a0657865_foodPlan';
     protected $maxProtein = 55;
 
     protected function getConnect()
