@@ -64,21 +64,21 @@ class Bot
                 break;
             case 'За день':
                 $db = new Db();
-                $response = $db->getReport(1);
+                $response = $db->getReport(1, $this->chat_id);
                 $responseString = "Отчет за день:\n\n" .$response;
 
                 $this->sendBotMessage($responseString, $baseKeyboard);
                 break;
             case 'За неделю':
                 $db = new Db();
-                $response = $db->getReport(7);
+                $response = $db->getReport(7, $this->chat_id);
                 $responseString = "Отчет за неделю:\n\n" .$response;
 
                 $this->sendBotMessage($responseString, $baseKeyboard);
                 break;
             case 'За месяц':
                 $db = new Db();
-                $response = $db->getReport(30);
+                $response = $db->getReport(30, $this->chat_id);
                 $responseString = "Отчет за месяц:\n\n" .$response;
 
                 $this->sendBotMessage($responseString, $baseKeyboard);
@@ -86,7 +86,7 @@ class Bot
             case substr_count($this->text, ",") < 2:
                 $foodData = explode(',', $this->text);
                 $db = new Db();
-                $response = $db->addFood($foodData[0], $foodData[1], $this->userName, $this->messageId);
+                $response = $db->addFood($foodData[0], $foodData[1], $this->userName, $this->messageId, $this->chat_id);
 
                 $this->sendBotMessage($response, $baseKeyboard);
                 break;

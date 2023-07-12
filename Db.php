@@ -22,7 +22,7 @@ class Db
         }
     }
 
-    public function addFood($foodName, $proteinCount, $userName, $messageId)
+    public function addFood($foodName, $proteinCount, $userName, $messageId, $chatId)
     {
         $conn = $this->getConnect();
 
@@ -31,11 +31,11 @@ class Db
         }
 
         $currentDate = date('Y-m-d H:i:s');
-        $sql = "INSERT INTO `food` (`user_name`, `food_name`, `protein`, `date`, `message_id`) VALUES ('$userName', '$foodName', '$proteinCount', '$currentDate', '$messageId')";
+        $sql = "INSERT INTO `food` (`user_name`, `food_name`, `protein`, `date`, `message_id`, `chat_id`) VALUES ('$userName', '$foodName', '$proteinCount', '$currentDate', '$messageId', '$chatId')";
         $affectedRowsNumber = $conn->exec($sql);
 
         if($affectedRowsNumber > 0 ){
-            $maxProteinCount = $this->getProteinForDay();
+            $maxProteinCount = $this->getProteinForDay($chatId);
             if ($maxProteinCount >= $this->maxProtein) {
                 return "Данные успешно записаны\n\n<b>ВНИМАНИЕ! КОЛИЧЕСТВО БЕЛКА ПРЕВОСХОДИТ МАКСИМАЛЬНО ДОПУСТИМОЕ!\nБелка за день = ".$maxProteinCount."</b>";
             }
@@ -46,12 +46,12 @@ class Db
         }
     }
 
-    protected function getProteinForDay()
+    protected function getProteinForDay($chatId)
     {
         $response = 0;
 
         $conn = $this->getConnect();
-        $sql = "SELECT `protein` FROM `food` WHERE date = CURDATE()";
+        $sql = "SELECT `protein` FROM `food` WHERE date = CURDATE() AND chat_id = '$chatId'";
         $request = $conn->query($sql);
 
         while($row = $request->fetch()){
@@ -61,7 +61,7 @@ class Db
         return $response;
     }
 
-    public function getReport($period)
+    public function getReport($period, $chatId)
     {
         $conn = $this->getConnect();
         $sql = '';
@@ -69,11 +69,11 @@ class Db
         $response = '';
 
         if ($period == 1) {
-            $sql = "SELECT `food_name`, `protein`, `date` FROM `food` WHERE date = CURDATE()";
+            $sql = "SELECT `food_name`, `protein`, `date` FROM `food` WHERE date = CURDATE() AND chat_id = '$chatId'";
         } else if ($period == 7) {
-            $sql = "SELECT `food_name`, `protein`, `date` FROM food WHERE date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)";
+            $sql = "SELECT `food_name`, `protein`, `date` FROM food WHERE date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)  AND chat_id = '$chatId'";
         } else if ($period == 30) {
-            $sql = "SELECT `food_name`, `protein`, `date` FROM food WHERE MONTH(date) = MONTH(CURDATE())";
+            $sql = "SELECT `food_name`, `protein`, `date` FROM food WHERE MONTH(date) = MONTH(CURDATE())  AND chat_id = '$chatId'";
         }
 
         $request = $conn->query($sql);
