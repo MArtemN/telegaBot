@@ -1,4 +1,4 @@
-<?php
+ <?php
 require_once($_SERVER['DOCUMENT_ROOT'].'/foodBot/settings/setting.php');
 class Db
 {
@@ -95,7 +95,7 @@ class Db
                 }
                 $response .= "\n<b>Блюдо:</b> " .$item['food_name']. "\n<b>Количество белка:</b> " .$item['protein']. "\n";
             }
-            $response .= "\n<b>Общее количество белка за день: " .$proteinCount. "</b>\n\n";
+            $response .= "\n<b>Общее количество белка за день: " .$proteinCount. "</b>\nОсталось на сегодня " . (max($this->maxProtein - $proteinCount, 0));
         }
 
         return $response;
