@@ -14,7 +14,7 @@ class Db
         $this->settings = $settings;
     }
 
-    protected function getConnect()
+    private function getConnect(): PDO|string
     {
         try {
             // подключаемся к серверу
@@ -28,7 +28,7 @@ class Db
         }
     }
 
-    public function addFood($foodName, $proteinCount, $userName, $messageId, $chatId)
+    public function addFood($foodName, $proteinCount, $userName, $messageId, $chatId): string
     {
         $conn = $this->getConnect();
 
@@ -52,7 +52,7 @@ class Db
         }
     }
 
-    protected function getProteinForDay($chatId)
+    private function getProteinForDay($chatId)
     {
         $response = 0;
 
@@ -67,7 +67,7 @@ class Db
         return $response;
     }
 
-    public function getReport($period, $chatId)
+    public function getReport($period, $chatId): string
     {
         $conn = $this->getConnect();
         $sql = '';

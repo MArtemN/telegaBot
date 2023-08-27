@@ -19,13 +19,14 @@ class Bot
     /**
      * @throws TelegramSDKException
      */
+
     public function __construct()
     {
         $settings = new Settings();
         $this->token = $settings->TOKEN;
     }
 
-    public function startBot()
+    public function startBot(): void
     {
         $this->telegram = new Api($this->token);
 
@@ -102,12 +103,12 @@ class Bot
         }
     }
 
-    protected function helloUser()
+    private function helloUser(): string
     {
         return 'Здравствуйте ' . $this->firstName . ' ' . $this->lastName;
     }
 
-    protected function sendBotMessage($reply, $replyMarkup = false)
+    private function sendBotMessage($reply, $replyMarkup = false): void
     {
         $this->telegram->sendMessage(
             ['chat_id' => $this->chat_id,
