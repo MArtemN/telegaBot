@@ -1,25 +1,30 @@
 <?php
-require_once('vendor/autoload.php');
-require_once('Db.php');
-require_once($_SERVER['DOCUMENT_ROOT'].'/foodBot/settings/setting.php');
+namespace FoodBot\Bot;
+
 use Telegram\Bot\Api;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 
 class Bot
 {
-    protected $token = TOKEN;
-    protected $telegram;
-    protected $result;
-    protected $text;
-    protected $chat_id;
-    protected $messageId;
-    protected $firstName;
-    protected $lastName;
-    protected $userName;
+    private $token;
+    private $telegram;
+    private $result;
+    private $text;
+    private $chat_id;
+    private $messageId;
+    private $firstName;
+    private $lastName;
+    private $userName;
 
     /**
      * @throws TelegramSDKException
      */
+    public function __construct()
+    {
+        $settings = new Settings();
+        $this->token = $settings->TOKEN;
+    }
+
     public function startBot()
     {
         $this->telegram = new Api($this->token);

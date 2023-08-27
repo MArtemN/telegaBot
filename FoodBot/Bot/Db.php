@@ -1,18 +1,24 @@
- <?php
-require_once($_SERVER['DOCUMENT_ROOT'].'/foodBot/settings/setting.php');
+<?php
+namespace FoodBot\Bot;
+
+use PDO;
+use PDOException;
+
 class Db
 {
-    protected $host = HOST;
-    protected $userName = USER_NAME;
-    protected $password = PASSWORD;
-    protected $dbName = DB_NAME;
-    protected $maxProtein = MAX_PROTEIN;
+    private $settings;
+
+    public function __construct()
+    {
+        $settings = new Settings();
+        $this->settings = $settings;
+    }
 
     protected function getConnect()
     {
         try {
             // подключаемся к серверу
-            $conn = new PDO('mysql:host=' . $this->host . ';charset=utf8;dbname=' . $this->dbName, $this->userName, $this->password);
+            $conn = new PDO('mysql:host=' . $this->settings->HOST . ';charset=utf8;dbname=' . $this->settings->DB_NAME, $this->settings->USER_NAME, $this->settings->PASSWORD);
             echo "Database connection established";
             return $conn;
         }
@@ -36,7 +42,7 @@ class Db
 
         if($affectedRowsNumber > 0 ){
             $maxProteinCount = $this->getProteinForDay($chatId);
-            if ($maxProteinCount >= $this->maxProtein) {
+            if ($maxProteinCount >= $this->settings->MAX_PROTEIN) {
                 return "Данные успешно записаны\n\n<b>ВНИМАНИЕ! КОЛИЧЕСТВО БЕЛКА ПРЕВОСХОДИТ МАКСИМАЛЬНО ДОПУСТИМОЕ!\nБелка за день = ".$maxProteinCount."</b>";
             }
 
@@ -95,7 +101,7 @@ class Db
                 }
                 $response .= "\n<b>Блюдо:</b> " .$item['food_name']. "\n<b>Количество белка:</b> " .$item['protein']. "\n";
             }
-            $response .= "\n<b>Общее количество белка за день: " .$proteinCount. "</b>\nОсталось на сегодня " . (max($this->maxProtein - $proteinCount, 0));
+            $response .= "\n<b>Общее количество белка за день: " .$proteinCount. "</b>\nОсталось на сегодня " . (max($this->settings->maxProtein - $proteinCount, 0));
         }
 
         return $response;
