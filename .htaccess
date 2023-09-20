@@ -1,5 +1,1 @@
-RewriteEngine On
-RewriteRule ^FoodBot/.*$ https://webvibe-engine.ru/404.php [L,R=301]
-RewriteRule ^vendor/.*$ https://webvibe-engine.ru/404.php [L,R=301]
-RewriteRule ^composer\.json$ https://webvibe-engine.ru/404.php [L,R=301]
-RewriteRule ^composer\.lock$ https://webvibe-engine.ru/404.php [L,R=301]
+
